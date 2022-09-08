@@ -1,0 +1,19 @@
+.logo{
+    color: var(--green-500);
+}
+.header {
+    background: var(--gray-800);
+    display: flex;
+    justify-content: center;
+    padding: 1.25rem 0;
+}
+.header > strong{
+    margin-left: 0.5rem;
+    font-size: 2rem;
+    font-variant: small-caps;
+}
+.header img {
+    height: 2.5rem;
+    gap: 2rem;
+    align-items: flex-start;
+}
