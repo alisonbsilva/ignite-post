@@ -9,8 +9,8 @@ const posts = [
   {
     id: 1,
     author:{
-      avatarUrl:'https://github.com/alisonbsilva.png',
-      name:'Alison Silva',
+      avatarUrl:'https://github.com/marcosvnunes.png',
+      name:'Marcos Vnuens',
       role:'Dev Front-end',
     },
     content: [
@@ -52,6 +52,7 @@ export function App(){
       {posts.map(post => {
         return (
         <Post
+        key={post.id}
          author={post.author}
          content={post.content}
          publishedAt={post.publishedAt}         
