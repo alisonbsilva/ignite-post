@@ -3,11 +3,26 @@ import ptBR from 'date-fns/locale/pt-BR'
 import style from './Post.module.css'
 import { Comment } from './Comment'
 import { Avatar } from './Avatar'
-import { useState } from 'react'
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react'
 
+interface Author {
+    name: string;
+    role: string;
+    avatarUrl: string;
+}
 
+interface Content {
+    type: 'paragraph' | 'link';
+    content: string;
+}
 
-export function Post({ author, publishedAt, content }){
+interface PostProps {
+    author: Author;
+    publishedAt: Date;
+    content: Content[];
+}
+
+export function Post({ author, publishedAt, content }: PostProps){
     const [comments, setComments] = useState(['Olá Mundo!'])
 
     const [ newCommentText, setNewCommentText] = useState('')
@@ -20,17 +35,22 @@ export function Post({ author, publishedAt, content }){
     addSuffix:true
   })
 
-  function handleCreateNewComment(){
+  function handleCreateNewComment(event:FormEvent){
     event.preventDefault()
     setComments([...comments, newCommentText])  
     setNewCommentText('')  
   }
 
-  function handleNewCommentChange() {
+  function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement> ) {
+    event.target.setCustomValidity('')
    setNewCommentText(event.target.value)
   } 
 
-  function deleteComment( commentToDelete){
+  function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>){
+    event.target.setCustomValidity('Este campo é obrigatório!')
+  }
+
+  function deleteComment( commentToDelete:String){
     const commentsWithoutDeletedOne = comments.filter(comment => {
         return comment !== commentToDelete 
     })
@@ -38,6 +58,7 @@ export function Post({ author, publishedAt, content }){
     setComments(commentsWithoutDeletedOne)
   }
 
+  const isNewCommentEmpty = newCommentText.length === 0
 
     return(
         <article className={style.post}>
@@ -72,10 +93,16 @@ export function Post({ author, publishedAt, content }){
                     placeholder='Deixe um comentario'
                     value={newCommentText}
                     onChange={handleNewCommentChange}
+                    onInvalid={handleNewCommentInvalid}
+                    required
                 />
 
                 <footer>
-                    <button type='submit'>Publicar</button>
+                  <button
+                    disabled={isNewCommentEmpty} 
+                    type='submit'
+                    >
+                        Publicar</button>
                 </footer>
             </form>
 
